@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Crispy Vada Enterprises</title>
+<link rel="icon" type="image/png" href="logo.png">
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
 
@@ -27,6 +28,7 @@ body{margin:0;font-family:Poppins;background:linear-gradient(135deg,#ffd6ec,#fff
 @keyframes scroll{to{transform:translateX(-100%)}}
 .hero{height:100vh;background:linear-gradient(135deg,#ff4fa3,#ff85c1);display:flex;flex-direction:column;justify-content:center;align-items:center;color:white;text-align:center}
 .hero h1{font-size:3em;margin:10px}
+.logo{width:140px;max-width:60vw;height:auto;margin-bottom:8px;filter:drop-shadow(0 8px 18px rgba(0,0,0,0.25))}
 button{padding:12px 20px;border:none;border-radius:10px;background:white;color:#ff2e8a;cursor:pointer}
 nav{background:white;padding:12px;text-align:center;position:sticky;top:0;box-shadow:0 3px 10px rgba(0,0,0,0.1)}
 nav a{margin:0 15px;color:#ff2e8a;font-weight:bold;text-decoration:none}
@@ -62,6 +64,7 @@ form button{margin-top:15px;background:#ff4fa3;color:white}
 <div id="stock">VADAcoin Stock Price: ₹<span id="price">420</span></div>
 
 <div class="hero">
+<img class="logo" src="logo.png" alt="Crispy Vada Enterprises logo">
 <h1>🌸 Crispy Vada Enterprises 🌸</h1>
 <p>Founded by Priyamvada Sharma • Crunchy Ideas • Pink Innovation</p>
 <button onclick="document.getElementById('about').scrollIntoView()">Explore ↓</button>
@@ -142,6 +145,8 @@ const loader=document.getElementById("loader");
 const price=document.getElementById("price");
 const chatBox=document.getElementById("chatBox");
 const vadaMascot=document.getElementById("vadaMascot");
+const chatMessages=document.getElementById("chatMessages");
+const chatInput=document.getElementById("chatInput");
 
 window.onload=()=>setTimeout(()=>loader.style.display="none",2000);
 setInterval(()=>price.innerText=400+Math.floor(Math.random()*80),2000);
@@ -154,7 +159,40 @@ document.body.appendChild(p);
 setTimeout(()=>p.remove(),6000);
 },300);
 
-vadaMascot.onclick=()=>chatBox.style.display=chatBox.style.display==="flex"?"none":"flex";
+vadaMascot.onclick=()=>{
+const isOpen=chatBox.style.display==="flex";
+chatBox.style.display=isOpen?"none":"flex";
+if(!isOpen&&chatMessages.children.length===0){
+addChatMessage("Vada Bot","Hi, I am online. Ask me anything crispy.");
+}
+};
+
+function addChatMessage(sender,text){
+const row=document.createElement("div");
+row.innerHTML="<strong>"+sender+":</strong> "+text;
+chatMessages.appendChild(row);
+chatMessages.scrollTop=chatMessages.scrollHeight;
+}
+
+function getBotReply(text){
+const q=text.toLowerCase();
+if(q.includes("hi")||q.includes("hello")) return "Hello. Pink systems are stable.";
+if(q.includes("founder")) return "Founder: Priyamvada Sharma.";
+if(q.includes("service")) return "We run news, newspaper, and pink innovation consulting.";
+if(q.includes("game")) return "Press Start Game and click vadas to score points.";
+if(q.includes("contact")) return "Use the contact form and Gmail opens in a new tab.";
+return "Crispy answer: keep building and ship the next version.";
+}
+
+chatInput.addEventListener("keydown",(e)=>{
+if(e.key!=="Enter") return;
+e.preventDefault();
+const text=chatInput.value.trim();
+if(!text) return;
+addChatMessage("You",text);
+chatInput.value="";
+setTimeout(()=>addChatMessage("Vada Bot",getBotReply(text)),220);
+});
 
 function sendMail(){
 window.open("https://mail.google.com/mail/?view=cm&fs=1&to=YOURGMAIL@gmail.com");
@@ -208,4 +246,3 @@ clearInterval(fall);
 
 </body>
 </html>
-
